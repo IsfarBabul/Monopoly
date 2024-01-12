@@ -1,11 +1,34 @@
 public class MonopolyLogic {
 
-    public MonopolyLogic() {
+    String[][] board;
 
+    public MonopolyLogic() {
+        board = createBoard();
     }
 
     public void run() {
         board();
+        System.out.println();
+        printBoard();
+    }
+
+    public String[][] createBoard() {
+        String[][] board = new String[50][50];
+        for (int y = 0; y < 50; y++) {
+            for (int x = 0; x < 50; x++) {
+                board[y][x] = "⬛";
+            }
+        }
+        return board;
+    }
+
+    public void printBoard() {
+        for (int y = 0; y < 49; y++) {
+            for (int x = 0; x < 49; x++) {
+                System.out.print(board[y][x]);
+            }
+            System.out.println();
+        }
     }
 
     public void board() {
@@ -58,8 +81,5 @@ public class MonopolyLogic {
         System.out.println("⬜⬜⛔⛔⛔⛔⬛⬜⬜⬜⬛⬜⬜⬜⬛🟧⬜🟧⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜🏛️⬜⬛⬜⬜⬜⬛🟦⬜⬜⬛⬜⬜⬜⬛🚥🟥⬜⬜🟥⬜");
         System.out.println("⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟧🟧🟧⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟦🟦⬜⬛⬜⬜⬜⬛🟥🟥🟥🟥🟥⬜");
         System.out.println("⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟧⬜🟧⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟦⬜⬜⬛⬜⬜⬜⬛🚥🟥⬜⬜⬜⬜");
-        System.out.println("🟩🟦👺🇬🇴🚓🚔🚨🚥🚦🛑🛣️⛽🌇🌃🌆🌉🔲🔳💠♢💲💸💵🤑💳💴💶💷🔫⚗️💧🔋📜📉📈🏛️🚰💡💦🛠️🏢🚸✳️✳️✴️");
-
-
     }
 }
