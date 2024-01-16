@@ -4,6 +4,10 @@ public class MonopolyLogic {
 
     public MonopolyLogic() {
         board = createBoard();
+        placeOnBoard(MonopolyDecorations.moneySign, 9, 9);
+        placeOnBoard(MonopolyDecorations.monopolySign, 9, 17);
+        placeOnBoard(flipSpace(MonopolyDecorations.monopolyInvertedSign), 9, 29);
+        placeOnBoard(MonopolyDecorations.chanceAndCommunityChest, 9, 33);
     }
 
     public void run() {
@@ -82,4 +86,44 @@ public class MonopolyLogic {
         System.out.println("⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟧🟧🟧⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟦🟦⬜⬛⬜⬜⬜⬛🟥🟥🟥🟥🟥⬜");
         System.out.println("⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟧⬜🟧⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛🟦⬜⬜⬛⬜⬜⬜⬛🚥🟥⬜⬜⬜⬜");
     }
+
+    private void placeOnBoard(String[][] boardPlacer, int startX, int startY) {
+        int restartX = boardPlacer[0].length;
+        for (String[] strings : boardPlacer) {
+            for (String string : strings) {
+                board[startY][startX] = string;
+                startX++;
+            }
+            startX -= restartX;
+            startY++;
+        }
+    }
+
+    private String[][] turnSpaceCounterClockwise(String[][] space) {   //will turn counterclockwise sort of like when turning a line around a circle in mathematics to determine radians
+        int x = space[0].length;
+        int y = space.length;
+        String[][] newSpace = new String[x][y];
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                newSpace[j][i] = space[i][j];
+            }
+        }
+        space = newSpace;
+        return space;
+    }
+
+    public String[][] flipSpace(String[][] space) {
+        for (int i = 0; i < 2; i++) {
+            space = turnSpaceCounterClockwise(space);
+        }
+        return space;
+    }
+
+    public String[][] turnSpaceClockwise(String[][] space) {
+        for (int i = 0; i < 3; i++) {
+            space = turnSpaceCounterClockwise(space);
+        }
+        return space;
+    }
+
 }
