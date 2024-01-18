@@ -11,6 +11,10 @@ public abstract class BoardSpace {
         return layout;
     }
 
+    public void setLayout(String[][] layout) {
+        this.layout = layout;
+    }
+
     public String[] getPlayerPositions() {
         return playerPositions;
     }
