@@ -1,6 +1,8 @@
 public class MonopolyLogic {
 
     String[][] board;
+    BoardSpace[] boardSpaces;
+    TitleDeedCard[] titleDeeds;
 
     public MonopolyLogic() {
         board = createBoard();
@@ -33,6 +35,13 @@ public class MonopolyLogic {
             }
             System.out.println();
         }
+    }
+
+    private void createPropertyTitleDeeds() {
+
+    }
+    public void createBoardSpaces() {
+
     }
 
     public void board() {

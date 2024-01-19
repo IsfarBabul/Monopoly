@@ -4,10 +4,13 @@ public class TitleDeedCard extends Card {
     private int mortgageAmount;
     private int level;
 
-    public TitleDeedCard(int mortgageAmount) {
+    private int[] rentAmounts;
+
+    public TitleDeedCard(int mortgageAmount, int[] rentAmounts) {
         cardOwner = null;
         mortgage = false;
         this.mortgageAmount = mortgageAmount;
+        this.rentAmounts = rentAmounts;
         level = 0;
     }
 
