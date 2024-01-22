@@ -1,12 +1,19 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class MonopolyLogic {
 
     String[][] board;
     BoardSpace[] boardSpaces;
     TitleDeedCard[] titleDeeds;
+    ArrayList<MonopolyPlayer> turnOrder;
+    Scanner scan;
 
     public MonopolyLogic() {
         board = createBoard();
         boardSpaces = new BoardSpace[40];
+        turnOrder = new ArrayList<>();
+        scan = new Scanner(System.in);
         placeOnBoard(MonopolyDecorations.moneySign, 9, 9);
         placeOnBoard(MonopolyDecorations.monopolySign, 9, 17);
         placeOnBoard(flipSpace(MonopolyDecorations.monopolyInvertedSign), 9, 29);
@@ -19,6 +26,29 @@ public class MonopolyLogic {
         board();
         System.out.println();
         printBoard();
+        initializePlayers();
+
+    }
+
+    public void initializePlayers() {
+        ConsoleUtility.clearScreen();
+        System.out.print("How many players would like to play? ");
+        int numPlayers = scan.nextInt();
+        scan.nextLine();
+        System.out.println(numPlayers);
+        for (int i = 0; i < numPlayers; i++) {
+            printBoard();
+            System.out.print("What name would this player like to have? ");
+            String name = scan.nextLine();
+            System.out.println();
+            System.out.print("What token would this player like to have? (can be any character but an emoji is recommended) ");
+            String token = scan.nextLine();
+            System.out.println();
+            token = token.substring(0, 1);
+            MonopolyPlayer player = new MonopolyPlayer(name, token);
+            turnOrder.add(player);
+            ConsoleUtility.clearScreen();
+        }
     }
 
     public String[][] createBoard() {
@@ -105,7 +135,6 @@ public class MonopolyLogic {
             } else if (i == 7 || i == 22 || i == 36) {
                 boardSpace = new CardBoardSpace("Chance", true);
             } else {
-                System.out.println(propertyBoardSpaceIndex);
                 boardSpace = new PropertyBoardSpace(boardSpaceNames[propertyBoardSpaceIndex], titleDeeds[propertyBoardSpaceIndex], titleDeeds[propertyBoardSpaceIndex].getColor());
                 propertyBoardSpaceIndex++;
             }
