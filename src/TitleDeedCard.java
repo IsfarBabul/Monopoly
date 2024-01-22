@@ -1,16 +1,16 @@
-public class TitleDeedCard extends Card {
+public abstract class TitleDeedCard extends Card {
+    private String color;
     private String cardOwner;
     private boolean mortgage;
     private int mortgageAmount;
     private int level;
 
-    private int[] rentAmounts;
 
-    public TitleDeedCard(int mortgageAmount, int[] rentAmounts) {
+    public TitleDeedCard(int mortgageAmount, String color) {
+        this.color = color;
         cardOwner = null;
         mortgage = false;
         this.mortgageAmount = mortgageAmount;
-        this.rentAmounts = rentAmounts;
         level = 0;
     }
 
@@ -20,6 +20,10 @@ public class TitleDeedCard extends Card {
 
     public void setCardOwner(String cardOwner) {
         this.cardOwner = cardOwner;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public boolean isMortgage() {
@@ -37,4 +41,6 @@ public class TitleDeedCard extends Card {
     public void setLevel(int level) {
         this.level = level;
     }
+
+    public abstract int getRentAmount();
 }
