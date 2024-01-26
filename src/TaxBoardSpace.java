@@ -21,6 +21,11 @@ public class TaxBoardSpace extends BoardSpace {
         }
         setLayout(layout);
     }
+
+    public void setOccupyingSpaces(int length) {
+        super.setOccupyingSpaces(length, 1, 3);
+    }
+
     @Override
     public void activateAbility() {
         if (isIncome) {

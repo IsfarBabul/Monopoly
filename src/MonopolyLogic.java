@@ -6,13 +6,15 @@ public class MonopolyLogic {
     String[][] board;
     BoardSpace[] boardSpaces;
     TitleDeedCard[] titleDeeds;
-    ArrayList<MonopolyPlayer> turnOrder;
+    MonopolyPlayer[] turnOrder;
+    Die die1;
+    Die die2;
+    SpeedDie speedDie;
     Scanner scan;
 
     public MonopolyLogic() {
         board = createBoard();
         boardSpaces = new BoardSpace[40];
-        turnOrder = new ArrayList<>();
         scan = new Scanner(System.in);
         placeOnBoard(MonopolyDecorations.moneySign, 9, 9);
         placeOnBoard(MonopolyDecorations.monopolySign, 9, 17);
@@ -20,6 +22,9 @@ public class MonopolyLogic {
         placeOnBoard(MonopolyDecorations.chanceAndCommunityChest, 9, 33);
         createPropertyTitleDeeds();
         createBoardSpaces();
+        die1 = new Die();
+        die2 = new Die();
+        speedDie = new SpeedDie();
     }
 
     public void run() {
@@ -27,15 +32,17 @@ public class MonopolyLogic {
         System.out.println();
         printBoard();
         initializePlayers();
-
     }
 
-    public void initializePlayers() {
+    private void initializePlayers() {
         ConsoleUtility.clearScreen();
         System.out.print("How many players would like to play? ");
         int numPlayers = scan.nextInt();
         scan.nextLine();
-        System.out.println(numPlayers);
+        turnOrder = new MonopolyPlayer[numPlayers];
+        GoBoardSpace goSpace = (GoBoardSpace) boardSpaces[0];
+        goSpace.setOccupyingSpaces(numPlayers);
+        System.out.println(numPlayers); //TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
         for (int i = 0; i < numPlayers; i++) {
             printBoard();
             System.out.print("What name would this player like to have? ");
@@ -43,12 +50,23 @@ public class MonopolyLogic {
             System.out.println();
             System.out.print("What token would this player like to have? (can be any character but an emoji is recommended) ");
             String token = scan.nextLine();
+            boardSpaces[0].changeLayout(token, ((GoBoardSpace) boardSpaces[0]).getxCoords()[i], ((GoBoardSpace) boardSpaces[0]).getyCoords()[i]);
+            updateBoardSpaces();
             System.out.println();
             token = token.substring(0, 1);
             MonopolyPlayer player = new MonopolyPlayer(name, token);
-            turnOrder.add(player);
+            turnOrder[i] = player;
             ConsoleUtility.clearScreen();
         }
+        printBoard();
+    }
+
+    private void turn() {
+        roll();
+    }
+
+    private void roll() {
+
     }
 
     public String[][] createBoard() {
@@ -105,6 +123,45 @@ public class MonopolyLogic {
                                          pacificAvenue, northCarolinaAvenue, pennsylvaniaAvenue, shortLine, parkPlace, boardwalk};
 
     }
+
+    private void updateBoardSpaces() {
+        int startX = 43;
+        int startY = 43;
+        for (int i = 0; i < 40; i++) {
+            int side = i / 10;
+            if (side == 1 && i % 10 != 0) {
+                placeOnBoard(turnSpaceClockwise(boardSpaces[i].getLayout()), startX, startY);
+            } else if (side == 2 && i % 10 != 0) {
+                placeOnBoard(flipSpace(boardSpaces[i].getLayout()), startX, startY);
+            } else if (side == 3 && i % 10 != 0) {
+                placeOnBoard(turnSpaceCounterClockwise(boardSpaces[i].getLayout()), startX, startY);
+            } else {
+                placeOnBoard(boardSpaces[i].getLayout(), startX, startY);
+            }
+            int offset;
+            if ((i + 1) % 10 == 0) {
+                offset = 7;
+            } else {
+                offset = 4;
+            }
+            if (i / 20 == 1 && (i + 1) % 10 == 1) {
+                offset += 3;
+            }
+            if (i / 20 == 1 && (i + 1) % 10 == 0) {
+                offset -= 3;
+            }
+            if (side == 0) {
+                startX -= offset;
+            } else if (side == 1) {
+                startY -= offset;
+            } else if (side == 2) {
+                startX += offset;
+            } else {
+                startY += offset;
+            }
+        }
+    }
+
     public void createBoardSpaces() {
         String[] boardSpaceNames = {"Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue", "Connecticut Avenue",
                                     "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue", "New York Avenue",
@@ -139,15 +196,15 @@ public class MonopolyLogic {
                 propertyBoardSpaceIndex++;
             }
             boardSpaces[i] = boardSpace;
-                if (side == 1) {
-                    placeOnBoard(turnSpaceClockwise(boardSpaces[i].getLayout()), startX, startY);
-                } else if (side == 2) {
-                    placeOnBoard(flipSpace(boardSpaces[i].getLayout()), startX, startY);
-                } else if (side == 3) {
-                    placeOnBoard(turnSpaceCounterClockwise(boardSpaces[i].getLayout()), startX, startY);
-                } else {
-                    placeOnBoard(boardSpaces[i].getLayout(), startX, startY);
-                }
+            if (side == 1 && i % 10 != 0) {
+                placeOnBoard(turnSpaceClockwise(boardSpaces[i].getLayout()), startX, startY);
+            } else if (side == 2 && i % 10 != 0) {
+                placeOnBoard(flipSpace(boardSpaces[i].getLayout()), startX, startY);
+            } else if (side == 3 && i % 10 != 0) {
+                placeOnBoard(turnSpaceCounterClockwise(boardSpaces[i].getLayout()), startX, startY);
+            } else {
+                placeOnBoard(boardSpaces[i].getLayout(), startX, startY);
+            }
             int offset;
             if ((i + 1) % 10 == 0) {
                 offset = 7;
@@ -166,7 +223,7 @@ public class MonopolyLogic {
                 startY -= offset;
             } else if (side == 2) {
                 startX += offset;
-            } else if (side == 3) {
+            } else {
                 startY += offset;
             }
         }

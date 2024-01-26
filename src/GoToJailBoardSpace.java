@@ -9,6 +9,11 @@ public class GoToJailBoardSpace extends BoardSpace {
                              {"🟦", "🟦", "🟦", "🟦", "🟦", "🟥"}};
         setLayout(layout);
     }
+
+    public void setOccupyingSpaces(int length) {
+        super.setOccupyingSpaces(length, 2, 2);
+    }
+
     @Override
     public void activateAbility() {
 

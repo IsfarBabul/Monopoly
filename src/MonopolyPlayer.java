@@ -5,12 +5,14 @@ public class MonopolyPlayer {
     private String playerToken;
     private int playerMoney;
     private ArrayList<Card> playerHand;
+    private boolean passedGO;
 
     public MonopolyPlayer(String playerName, String playerToken) {
         this.playerName = playerName;
         this.playerToken = playerToken;
         playerMoney = 2500;
         playerHand = new ArrayList<>();
+        passedGO = false;
     }
 
     public String getPlayerName() {
@@ -19,6 +21,10 @@ public class MonopolyPlayer {
 
     public String getPlayerToken() {
         return playerToken;
+    }
+
+    public boolean isPassedGO() {
+        return passedGO;
     }
 
     public int getPlayerMoney() {
@@ -35,6 +41,7 @@ public class MonopolyPlayer {
             playerHand.add(0, addedCard);
         } else {
             playerHand.add(addedCard);
+            sortHand();
         }
     }
     private void sortHand() {

@@ -21,6 +21,11 @@ public class CardBoardSpace extends BoardSpace {
         }
         setLayout(layout);
     }
+
+    public void setOccupyingSpaces(int length) {
+        super.setOccupyingSpaces(length, 0, 3);
+    }
+
     @Override
     public void activateAbility() {
         if (isChance) {
