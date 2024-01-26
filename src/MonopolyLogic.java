@@ -3,14 +3,16 @@ import java.util.Scanner;
 
 public class MonopolyLogic {
 
-    String[][] board;
-    BoardSpace[] boardSpaces;
-    TitleDeedCard[] titleDeeds;
-    MonopolyPlayer[] turnOrder;
-    Die die1;
-    Die die2;
-    SpeedDie speedDie;
-    Scanner scan;
+    private String[][] board;
+    private BoardSpace[] boardSpaces;
+    private TitleDeedCard[] titleDeeds;
+    private MonopolyPlayer[] turnOrder;
+    private MonopolyPlayer currentPlayer;
+    private Die die1;
+    private Die die2;
+    private SpeedDie speedDie;
+    private boolean win;
+    private Scanner scan;
 
     public MonopolyLogic() {
         board = createBoard();
@@ -25,6 +27,7 @@ public class MonopolyLogic {
         die1 = new Die();
         die2 = new Die();
         speedDie = new SpeedDie();
+        win = false;
     }
 
     public void run() {
@@ -32,6 +35,19 @@ public class MonopolyLogic {
         System.out.println();
         printBoard();
         initializePlayers();
+        int count = 0;
+        currentPlayer = turnOrder[count];
+        while (!win) {
+            System.out.println("It's " + currentPlayer.getPlayerName() + "'s turn to roll. Type anything to roll.");
+            scan.nextLine();
+            turn();
+            count++;
+            if (count == turnOrder.length) {
+                count = 0;
+            }
+            currentPlayer = turnOrder[count];
+        }
+        System.out.println("The winner is " + currentPlayer.getPlayerName());
     }
 
     private void initializePlayers() {
@@ -59,14 +75,69 @@ public class MonopolyLogic {
             ConsoleUtility.clearScreen();
         }
         printBoard();
+        //System.out.println("Now, it's time to determine who goes first.");
+        //turnOrder = changeOrder(turnOrder.length);
     }
+
+    /*private MonopolyPlayer[] changeOrder(int numPlayers) {
+        int[] rolledAmounts = new int[turnOrder.length];
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.print(turnOrder[i].getPlayerName() + ", click anything to roll.");
+            scan.nextLine();
+            int numberRolled = roll();
+            System.out.println();
+            System.out.print("It looks like you got a " + numberRolled);
+            rolledAmounts[i] = numberRolled;
+            ConsoleUtility.clearScreen();
+        }
+        return turnOrder;
+    }*/
 
     private void turn() {
-        roll();
+        int rolledNumbers = roll();
+        move(rolledNumbers);
     }
 
-    private void roll() {
+    private int roll() {
+        for (int i = 0; i < 5; i++) {
+            die1.rollDie();
+            die2.rollDie();
+            placeOnBoard(die1.dieAnimation(), 9, 21);
+            placeOnBoard(die2.dieAnimation(), 33, 21);
+            updateBoardSpaces();
+            printBoard();
+            try {
+                Thread.sleep(500);
+            } catch (Exception e) {
+                System.out.println("Error!");
+            }
+        }
+        die1.rollDie();
+        die2.rollDie();
+        placeOnBoard(Die.getActualRoll(), 8, 20);
+        placeOnBoard(Die.getActualRoll(), 32, 20);
+        placeOnBoard(die1.dieAnimation(), 9, 21);
+        placeOnBoard(die2.dieAnimation(), 33, 21);
+        updateBoardSpaces();
+        printBoard();
+        return die1.getRoll() + die2.getRoll();
+    }
 
+    private void move(int rolledNumbers) {
+        int boardSpaceNumber = currentPlayer.getBoardSpaceNumber() + rolledNumbers;
+        currentPlayer.setBoardSpaceNumber(boardSpaceNumber);
+        for (int i = currentPlayer.getBoardSpaceNumber(); i < boardSpaceNumber; i++) {
+            boardSpaces[i].removeOccupyingToken(currentPlayer, turnOrder);
+            int j;
+            if (i >= 40) {
+                j = i - 40;
+            } else {
+                j = i;
+            }
+            boardSpaces[j + 1].addOccupyingToken(currentPlayer, turnOrder);
+            updateBoardSpaces();
+            printBoard();
+        }
     }
 
     public String[][] createBoard() {

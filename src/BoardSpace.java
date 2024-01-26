@@ -38,10 +38,50 @@ public abstract class BoardSpace {
     }
 
     public void removeOccupyingPlayer(MonopolyPlayer occupyingPlayer) {
+        boolean removedOccupyingPlayer = false;
         for (int i = 0; i < occupyingPlayers.length; i++) {
             if (occupyingPlayers[i] == occupyingPlayer) {
+                removedOccupyingPlayer = true;
                 occupyingPlayers[i] = null;
-                break;
+            }
+            if (removedOccupyingPlayer) {
+                occupyingPlayers[i] = occupyingPlayers[i + 1];
+            }
+        }
+    }
+
+    public void addOccupyingToken(MonopolyPlayer occupyingPlayer, MonopolyPlayer[] turnOrder) {
+        int count = 0;
+        if (occupyingSpaces.length != 1) {
+            for (int i = 0; i < turnOrder.length; i++) {
+                if (turnOrder[i] == occupyingPlayer) {
+                    count = i;
+                    break;
+                }
+            }
+        }
+        if (occupyingSpaces[count].equals("⬜")) {
+            occupyingSpaces[count] = occupyingPlayer.getPlayerToken();
+        } else {
+            occupyingSpaces[count] = "👨‍👩‍👧‍👦";
+        }
+    }
+
+    public void removeOccupyingToken(MonopolyPlayer occupyingPlayer, MonopolyPlayer[] turnOrder) {
+        int count = 0;
+        if (occupyingSpaces.length != 1) {
+            for (int i = 0; i < turnOrder.length; i++) {
+                if (turnOrder[i] == occupyingPlayer) {
+                    count = i;
+                    break;
+                }
+            }
+        }
+        if (occupyingSpaces[count].equals(occupyingPlayer.getPlayerToken())) {
+            occupyingSpaces[count] = "⬜";
+        } else {
+            if (occupyingPlayers.length == 1) {
+                occupyingSpaces[count] = occupyingPlayers[0].getPlayerToken();
             }
         }
     }

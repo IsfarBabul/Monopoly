@@ -7,12 +7,15 @@ public class MonopolyPlayer {
     private ArrayList<Card> playerHand;
     private boolean passedGO;
 
+    private int boardSpaceNumber;
+
     public MonopolyPlayer(String playerName, String playerToken) {
         this.playerName = playerName;
         this.playerToken = playerToken;
         playerMoney = 2500;
         playerHand = new ArrayList<>();
         passedGO = false;
+        boardSpaceNumber = 0;
     }
 
     public String getPlayerName() {
@@ -25,6 +28,14 @@ public class MonopolyPlayer {
 
     public boolean isPassedGO() {
         return passedGO;
+    }
+
+    public int getBoardSpaceNumber() {
+        return boardSpaceNumber;
+    }
+
+    public void setBoardSpaceNumber(int boardSpaceNumber) {
+        this.boardSpaceNumber = boardSpaceNumber;
     }
 
     public int getPlayerMoney() {
